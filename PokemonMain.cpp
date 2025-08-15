@@ -37,7 +37,8 @@ int main() {
     cout << "4. Add a weakness to a Pokemon\n";
     cout << "5. Add a resistance to a Pokemon\n";
     cout << "6. Display Pokemon details\n";
-    cout << "7. Exit\n";
+    cout << "7. Battle with a Pokemon\n";
+    cout << "8. Exit\n";
 
     cout << "Enter your choice (1-7): ";
     vector<Pokemon> Mypokemons;
@@ -46,12 +47,24 @@ int main() {
     cin >> choice;
 
     switch (choice) {
-        case 1: {
-            cout << "Enter Pokemon name, type, and level: ";
+        case 1: 
+        {
             string name, type;
             int level;
-            cin >> name >> type >> level;
-            Pokemon newPokemon(name, type, level);
+            int health;
+            int attack;
+            int defense;
+            int speed;
+            int specialAttack;
+            int specialDefense;
+            
+            cout << "Enter Pokemon name: ";
+            cin >> name;
+            cout << "Enter Pokemon type: ";
+            cin >> type;
+            cout << "Enter level, health, attack, defense, speed, special attack, and special defense: ";
+            cin >> level >> health >> attack >> defense >> speed >> specialAttack >> specialDefense;
+            Pokemon newPokemon(name, type, level, health, attack, defense, speed, specialAttack, specialDefense);
 
             //automatically weaknesses, and resistances based off entered type
             auto it = typeChart.find(type);
@@ -85,7 +98,8 @@ int main() {
             Mypokemons.push_back(newPokemon);
             break;
         }
-        case 2: {
+        case 2: 
+        {
             if (Mypokemons.empty()) {
                 cout << "No Pokemon available. Please create a Pokemon first.\n";
                 break;
@@ -104,7 +118,8 @@ int main() {
             }
             break;
         }
-        case 3: {
+        case 3: 
+        {
             if (Mypokemons.empty()) {
                 cout << "No Pokemon available. Please create a Pokemon first.\n";
                 break;
@@ -123,5 +138,149 @@ int main() {
             }
             break;
         }
-};
+        case 4: 
+        {
+            if (Mypokemons.empty()) {
+                cout << "No Pokemon available. Please create a Pokemon first.\n";
+                break;
+            }
+            cout << "Enter the name of the Pokemon to add a weakness: ";
+            string pokemonName, weaknessName;
+            cin >> pokemonName;
+            cout << "Enter weakness name: ";
+            cin >> weaknessName;
+            for (auto& pokemon : Mypokemons) {
+                if (pokemon.getName() == pokemonName) {
+                    pokemon.addWeakness(weaknessName);
+                    cout << "Weakness " << weaknessName << " added to " << pokemon.getName() << "\n";
+                    break;
+                }
+            }
+            break;
+        }
+        case 5: 
+        {
+            if (Mypokemons.empty()) {
+                cout << "No Pokemon available. Please create a Pokemon first.\n";
+                break;
+            }
+            cout << "Enter the name of the Pokemon to add a resistance: ";
+            string pokemonName, resistanceName;
+            cin >> pokemonName;
+            cout << "Enter resistance name: ";
+            cin >> resistanceName;  
+            for (auto& pokemon : Mypokemons) {
+                if (pokemon.getName() == pokemonName) {
+                    pokemon.addResistance(resistanceName);
+                    cout << "Resistance " << resistanceName << " added to " << pokemon.getName() << "\n";
+                    break;
+                }
+            }
+            break;
+        }
+        case 6: 
+        {
+            if (Mypokemons.empty()) {
+                cout << "No Pokemon available. Please create a Pokemon first.\n";
+                break;
+            }
+            cout << "Enter the name of the Pokemon to display details: ";
+            string pokemonName;
+            cin >> pokemonName;
+            for (const auto& pokemon : Mypokemons) {
+                if (pokemon.getName() == pokemonName) {
+                    cout << "Name: " << pokemon.getName() << "\n";
+                    cout << "Type: " << pokemon.getType() << "\n";
+                    cout << "Level: " << pokemon.getLevel() << "\n";
+                    cout << "Moves: " << (pokemon.getMoves().empty() ? "None" : "") << "\n";
+                    for (const auto& move : pokemon.getMoves()) {
+                        cout << "- " << move << "\n";
+                    }
+                    cout << "Abilities: " << (pokemon.getAbilities().empty() ? "None" : "") << "\n";
+                    for (const auto& ability : pokemon.getAbilities()) {
+                        cout << "- " << ability << "\n";
+                    }
+                    cout << "Weaknesses: " << (pokemon.getWeaknesses().empty() ? "None" : "") << "\n";
+                    for (const auto& weakness : pokemon.getWeaknesses()) {
+                        cout << "- " << weakness << "\n";
+                    }
+                    cout << "Resistances: " << (pokemon.getResistances().empty() ? "None" : "") << "\n";
+                    for (const auto& resistance : pokemon.getResistances()) {
+                        cout << "- " << resistance << "\n";
+                    }
+                    break;
+                }
+            }
+            break;
+        }
+        case 7: 
+        {
+            if (Mypokemons.empty()) {
+                cout << "No Pokemon available. Please create a Pokemon first.\n";
+                break;
+            }
+            cout << "Enter the name of the Pokemon to battle: ";
+            string pokemonName;
+            cin >> pokemonName;
+            bool found = false;
+            for (const auto& pokemon : Mypokemons) {
+                if (pokemon.getName() == pokemonName) {
+                    found = true;
+                    cout << "Battling with " << pokemon.getName() << "!\n";
+                    // create simple opponent Pokemon or choose from existing ones
+                    cout << "Choose an opponent Pokemon (or create a new one):\n";
+                    cout << "1. Create a new opponent Pokemon\n";
+                    cout << "2. Use an existing Pokemon\n";
+                    int opponentChoice;
+                    cin >> opponentChoice;
+                    if (opponentChoice == 1) {
+                        string opponentName, opponentType;
+                        int opponentLevel, opponentHealth, opponentAttack, opponentDefense, opponentSpeed, 
+                        opponentSpecialAttack, opponentSpecialDefense;
+
+                        cout << "Enter opponent Pokemon name, type, level, health, attack, defense, speed, special attack, and special defense: ";
+                        cin >> opponentName >> opponentType >> opponentLevel >> opponentHealth >> opponentAttack >> 
+                        opponentDefense >> opponentSpeed >> opponentSpecialAttack >> opponentSpecialDefense;
+                        // Create opponent Pokemon
+                        Pokemon opponentPokemon(opponentName, opponentType, opponentLevel, opponentHealth,
+                         opponentAttack, opponentDefense, opponentSpeed, opponentSpecialAttack, opponentSpecialDefense);
+                        // Automatically add weaknesses and resistances based on type
+                        auto it = typeChart.find(opponentType);
+                        if (it != typeChart.end()) {
+                            opponentPokemon.addWeakness(it->second.first);
+                            opponentPokemon.addResistance(it->second.second);
+                        }
+                        cout << "Opponent Pokemon " << opponentPokemon.getName() << " created!\n";
+                    } else if (opponentChoice == 2) {
+                        cout << "Enter the name of the existing opponent Pokemon: ";
+                        string opponentName;
+                        cin >> opponentName;
+                        bool opponentFound = false;
+                        for (const auto& opponent : Mypokemons) {
+                            if (opponent.getName() == opponentName) {
+                                opponentFound = true;
+                                cout << "Battling with opponent " << opponent.getName() << "!\n";
+                            }
+                        }
+                        if (!opponentFound) {
+                            cout << "Opponent Pokemon not found. Please create or choose an existing Pokemon.\n";
+                            break;
+                        }
+                    } 
+                    else {
+                        cout << "Invalid choice. Please choose 1 or 2.\n";
+                        break;
+                    }
+                    // (battle logic would go here)
+                    break;
+                }
+            }
+            break;
+        }
+        case 8: 
+        {
+            cout << "Exiting the Pokemon Manager. Goodbye!\n";
+            return 0;
+        }
+    }
 }

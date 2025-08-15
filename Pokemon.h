@@ -18,15 +18,28 @@ class Pokemon {
         string name;
         string type;
         int level;
+        int health;
+        int attack;
+        int defense;
+        int speed;
+        int specialAttack;
+        int specialDefense;
         vector<Move> moves;
         vector <string> abilities;
         vector<string> weaknesses;
         vector<string> resistances;
     public:
-        Pokemon(const string& name, const string& type, int level){
+        Pokemon(const string& name, const string& type, int level, int health, int attack, 
+                int defense, int speed, int specialAttack, int specialDefense){
             this->name = name;
             this->type = type;
             this->level = level;
+            this->health = health;
+            this->attack = attack;
+            this->defense = defense;
+            this->speed = speed;
+            this->specialAttack = specialAttack;
+            this->specialDefense = specialDefense;
         };
         void addMove(const string& move);
         void addAbility(const string& ability);
@@ -45,6 +58,12 @@ class Pokemon {
         vector<string> getAbilities() const { return abilities; }
         vector<string> getWeaknesses() const { return weaknesses; }
         vector<string> getResistances() const { return resistances; }
+        int getHealth() const { return health; }
+        int getAttack() const { return attack; }
+        int getDefense() const { return defense; }
+        int getSpeed() const { return speed; }
+        int getSpecialAttack() const { return specialAttack; }
+        int getSpecialDefense() const { return specialDefense; }
 };
 
 #endif // POKEMON_H
