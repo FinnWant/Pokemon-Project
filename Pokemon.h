@@ -11,6 +11,12 @@ struct Move{
     string type;
     int power;
     int accuracy;
+    bool specialAttackMove = false; // Indicates if the move is a special attack move
+
+    Move(const string& name = "", const string& type = "", int power = 0, int accuracy = 0, 
+         bool specialAttackMove = false)
+        : name(name), type(type), power(power), accuracy(accuracy), specialAttackMove(specialAttackMove) {}
+    Move(const Move& other) : name(other.name), type(other.type), power(other.power), accuracy(other.accuracy), specialAttackMove(other.specialAttackMove) {}
 };
 
 class Pokemon {
@@ -48,17 +54,17 @@ class Pokemon {
         string getName() const { return name; }
         string getType() const { return type; } 
         int getLevel() const { return level; }
-        vector<string> getMoves() const{
-            vector<string> moveNames;
-            for (const auto& move : moves) {
-                moveNames.push_back(move.name);
-            }
-            return moveNames;
+        vector<Move> getMoves() const{
+            return moves;
         };
         vector<string> getAbilities() const { return abilities; }
         vector<string> getWeaknesses() const { return weaknesses; }
         vector<string> getResistances() const { return resistances; }
         int getHealth() const { return health; }
+        int setHealth(int newHealth) { 
+            health = newHealth; 
+            return health; 
+        }
         int getAttack() const { return attack; }
         int getDefense() const { return defense; }
         int getSpeed() const { return speed; }

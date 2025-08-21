@@ -194,7 +194,7 @@ int main() {
                     cout << "Level: " << pokemon.getLevel() << "\n";
                     cout << "Moves: " << (pokemon.getMoves().empty() ? "None" : "") << "\n";
                     for (const auto& move : pokemon.getMoves()) {
-                        cout << "- " << move << "\n";
+                        cout << "- " << move.name << "\n";
                     }
                     cout << "Abilities: " << (pokemon.getAbilities().empty() ? "None" : "") << "\n";
                     for (const auto& ability : pokemon.getAbilities()) {
@@ -256,10 +256,43 @@ int main() {
                         string opponentName;
                         cin >> opponentName;
                         bool opponentFound = false;
-                        for (const auto& opponent : Mypokemons) {
+                        for (auto& opponent : Mypokemons) {
                             if (opponent.getName() == opponentName) {
                                 opponentFound = true;
                                 cout << "Battling with opponent " << opponent.getName() << "!\n";
+                                while(pokemon.getHealth() > 0 && opponent.getHealth() > 0){
+                                    bool playerTurn = pokemon.getSpeed() >= opponent.getSpeed();
+                                    if (playerTurn) {
+                                        cout << pokemon.getName() << "'s turn. Choose a move:\n";
+                                        vector<Move> moves = pokemon.getMoves();
+                                        for (size_t i = 0; i < moves.size(); ++i) {
+                                            cout << i + 1 << ". " << moves[i].name << "\n";
+                                        }
+                                        int moveChoice;
+                                        cin >> moveChoice;
+                                        if (moveChoice < 1 || moveChoice > moves.size()) {
+                                            cout << "Invalid move choice. Try again.\n";
+                                            continue;
+                                        }
+                                        string chosenMove = moves[moveChoice - 1].name;
+                                        cout << pokemon.getName() << " used " << chosenMove << "!\n";
+                                        // damage calculation
+                                        if(moves[moveChoice - 1].specialAttackMove) {
+                                            int damage = (((2 * pokemon.getLevel()) / 5) + 2) * 
+                                            (pokemon.getSpecialAttack() / opponent.getSpecialDefense()) * 
+                                            moves[moveChoice - 1].power / 50;
+                                            opponent.setHealth(opponent.getHealth() - damage);
+                                            cout << "It dealt " << damage << " damage to " << opponent.getName() << "!\n";
+                                        } else {
+                                            int damage = (((2 * pokemon.getLevel()) / 5) + 2) * 
+                                            (pokemon.getAttack() / opponent.getDefense()) * 
+                                            moves[moveChoice - 1].power / 50;
+                                            opponent.setHealth(opponent.getHealth() - damage);
+                                            cout << "It dealt " << damage << " damage to " << opponent.getName() << "!\n";
+                                        }
+                                        //continue battle implementation...
+                                    }
+                                }
                             }
                         }
                         if (!opponentFound) {
@@ -271,7 +304,6 @@ int main() {
                         cout << "Invalid choice. Please choose 1 or 2.\n";
                         break;
                     }
-                    // (battle logic would go here)
                     break;
                 }
             }
