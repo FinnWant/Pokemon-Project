@@ -9,6 +9,11 @@ void Pokemon::addMove(const string& move) {
     newMove.name = move;
     cout << "Enter type, power, and accuracy for move " << move << ": ";
     cin >> newMove.type >> newMove.power >> newMove.accuracy;
+    // Determine if the move is a special attack move
+    cout << "Is this a special attack move? (1 for yes, 0 for no): ";
+    int special;
+    cin >> special;
+    newMove.specialAttackMove = (special == 1);
     moves.push_back(newMove);
     cout << "Move " << move << " added successfully \n";
 };

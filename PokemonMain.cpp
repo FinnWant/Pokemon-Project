@@ -223,7 +223,7 @@ int main() {
             string pokemonName;
             cin >> pokemonName;
             bool found = false;
-            for (const auto& pokemon : Mypokemons) {
+            for (auto& pokemon : Mypokemons) {
                 if (pokemon.getName() == pokemonName) {
                     found = true;
                     cout << "Battling with " << pokemon.getName() << "!\n";
@@ -290,7 +290,26 @@ int main() {
                                             opponent.setHealth(opponent.getHealth() - damage);
                                             cout << "It dealt " << damage << " damage to " << opponent.getName() << "!\n";
                                         }
-                                        //continue battle implementation...
+                                        playerTurn = false;
+                                    } else {
+                                        cout << opponent.getName() << "'s turn.\n";
+                                        vector<Move> moves = opponent.getMoves();
+                                        auto opponentMove = moves[rand() % moves.size()];
+                                        cout << opponent.getName() << " used " << opponentMove.name << "!\n";
+                                        if(opponentMove.specialAttackMove == true) {
+                                            int damage = (((2 * opponent.getLevel()) / 5) + 2) * 
+                                            (opponent.getSpecialAttack() / pokemon.getSpecialDefense()) * 
+                                            opponentMove.power / 50;
+                                            pokemon.setHealth(pokemon.getHealth() - damage);
+                                            cout << "It dealt " << damage << " damage to " << pokemon.getName() << "!\n";
+                                        } else {
+                                            int damage = (((2 * opponent.getLevel()) / 5) + 2) * 
+                                            (opponent.getAttack() / pokemon.getDefense()) * 
+                                            opponentMove.power / 50;
+                                            opponent.setHealth(opponent.getHealth() - damage);
+                                            cout << "It dealt " << damage << " damage to " << pokemon.getName() << "!\n";
+                                        }
+                                        playerTurn = true;
                                     }
                                 }
                             }
